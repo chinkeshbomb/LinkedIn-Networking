@@ -1,122 +1,22 @@
-Aberdeen Standard Investments
-Accenture
-ADCB
-ADGM entities
-Alvarez & Marsal
-AM Wealth Limited
-Amazon
-American Express
-Andersen
-Apex Group
-APM Capital Limited
-Balyasny
-Bank of America
-Barclays
-Barclays Private Bank
-BlackRock
-Blackstone
-Bloomberg
-BlueCreast Capital
-BNP Paribas
-BNY Mellon
-CACEIS
-Charles Schwab
-CIBC
-Citi
-Citi Private Bank
-Citibank
-Commercial Bank of Dubai
-Credit Agricole CIB
-Credit Suisse
-Deloitte
-Deutsche Bank
-Deutsche Wealth
-Dubai Holdings
-Dubai Islamic Bank
-EFG International
-Emirates NBD
-Equiti
-eToro
-EY
-EZRA
-First Abu Dhabi Bank
-FIS
-FIS Global
-Fitch Ratings
-Franklin Templeton
-FTI Consulting
-Goldman Sachs
-Houlihan Lokey
-HSBC
-HSBC Global Markets
-HSBC Private Banking
-HSBC Securities Services
-ING
-Interactive Brokers
-Invesco
-IQ-EQ
-J.P. Morgan
-Jefferies
-Julius Baer
-KPMG
-Lazard
-Lion Mortgage
-LMR Partners
-Lombard Odier
-Mackenzie Jones Middle East
-Magellan Capital
-Man Group
-Mashreq Bank
-Mastercard
-Millennium Management
-Mizuho
-Moelis & Company
-Moody's
-Morgan Stanley
-Morningstar
-MUFG
-Natixis
-NatWest Markets
-Naya Capital
-Noor Bank
-Northern Trust
-Pictet
-Principal Asset Management
-PWC
-Qube Research
-RAKBANK
-RBC Wealth Management
-Refinitiv LSEG
-Rothschild & Co
-S&P Global
-Saxo Bank
-Schonfeld
-Schroders
-Societe Generale
-SS&C Technologies
-Standard Chartered
-Standard Chartered Securities
-Standard Chartered Wealth
-State Street
-UBS
-Verition Fund Management
-Visa
-Vistra
-Wells Fargo
-Michael Page
-Financial Services
-Hedge Fund
-Equity Market
-Fintech
-Trading
-Middle Office Operation
-Financial Analyst
-Equity Analyst
-Credit Risk
-Credit
-FX Specialist
-FX
-Derivatives
+Middle Office Operations Dubai
+Hedge Fund Operations Dubai
+Trade Lifecycle Management Dubai
+Derivatives Operations Dubai
+Fixed Income Operations Dubai
+FX Operations Dubai
+P&L Analyst Dubai
+OTC Derivatives Dubai
+Swaps Operations Dubai
+Portfolio Operations Dubai
+Fund Administration Dubai
+Capital Markets Recruiter Dubai
+Trading Operations Recruiter Dubai
+Fund Operations Recruiter Dubai
+Hedge Fund Recruiter Dubai
+Private Equity Recruiter Dubai
+Asset Management Recruiter Dubai
+Investment Banking Recruiter Dubai
+Financial Services Recruiter Dubai
 Aberdeen Standard Investments Recruiter
 Accenture Recruiter
 ADCB Recruiter
@@ -355,3 +255,122 @@ Credit Talent Acquisition
 FX Specialist Talent Acquisition
 FX Talent Acquisition
 Derivatives Talent Acquisition
+Aberdeen Standard Investments
+Accenture
+ADCB
+ADGM entities
+Alvarez & Marsal
+AM Wealth Limited
+Amazon
+American Express
+Andersen
+Apex Group
+APM Capital Limited
+Balyasny
+Bank of America
+Barclays
+Barclays Private Bank
+BlackRock
+Blackstone
+Bloomberg
+BlueCreast Capital
+BNP Paribas
+BNY Mellon
+CACEIS
+Charles Schwab
+CIBC
+Citi
+Citi Private Bank
+Citibank
+Commercial Bank of Dubai
+Credit Agricole CIB
+Credit Suisse
+Deloitte
+Deutsche Bank
+Deutsche Wealth
+Dubai Holdings
+Dubai Islamic Bank
+EFG International
+Emirates NBD
+Equiti
+eToro
+EY
+EZRA
+First Abu Dhabi Bank
+FIS
+FIS Global
+Fitch Ratings
+Franklin Templeton
+FTI Consulting
+Goldman Sachs
+Houlihan Lokey
+HSBC
+HSBC Global Markets
+HSBC Private Banking
+HSBC Securities Services
+ING
+Interactive Brokers
+Invesco
+IQ-EQ
+J.P. Morgan
+Jefferies
+Julius Baer
+KPMG
+Lazard
+Lion Mortgage
+LMR Partners
+Lombard Odier
+Mackenzie Jones Middle East
+Magellan Capital
+Man Group
+Mashreq Bank
+Mastercard
+Millennium Management
+Mizuho
+Moelis & Company
+Moody's
+Morgan Stanley
+Morningstar
+MUFG
+Natixis
+NatWest Markets
+Naya Capital
+Noor Bank
+Northern Trust
+Pictet
+Principal Asset Management
+PWC
+Qube Research
+RAKBANK
+RBC Wealth Management
+Refinitiv LSEG
+Rothschild & Co
+S&P Global
+Saxo Bank
+Schonfeld
+Schroders
+Societe Generale
+SS&C Technologies
+Standard Chartered
+Standard Chartered Securities
+Standard Chartered Wealth
+State Street
+UBS
+Verition Fund Management
+Visa
+Vistra
+Wells Fargo
+Michael Page
+Financial Services
+Hedge Fund
+Equity Market
+Fintech
+Trading
+Middle Office Operation
+Financial Analyst
+Equity Analyst
+Credit Risk
+Credit
+FX Specialist
+FX
+Derivatives
