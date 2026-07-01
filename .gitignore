@@ -1,0 +1,14 @@
+venv/
+chrome_profile/
+browser_data/
+data/connections.json
+data/automation.log
+__pycache__/
+*.pyc
+# Saved LinkedIn HTML pages (not source code)
+Search_*.html
+Deepak*.html
+Ashwin*.html
+Untitled*.html
+*_files/
+Logs.txt

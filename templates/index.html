@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Automator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #0a66c2;
+            font-size: 1.8rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #0f3460;
+        }
+        .stat-card .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0a66c2;
+        }
+        .stat-card .label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            color: #888;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .tab.active {
+            background: #0f3460;
+            color: #fff;
+            border-bottom-color: #0f3460;
+        }
+
+        /* Panels */
+        .panel {
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 0 10px 10px 10px;
+            padding: 24px;
+            display: none;
+        }
+        .panel.active { display: block; }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #eee;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0a66c2;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .char-count {
+            font-size: 0.75rem;
+            color: #666;
+            text-align: right;
+            margin-top: 4px;
+        }
+        .char-count.warn { color: #e74c3c; }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #0a66c2;
+            color: #fff;
+        }
+        .btn-primary:hover { background: #004182; }
+        .btn-primary:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        /* Status Log */
+        .status-log {
+            background: #0d1117;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.8rem;
+            margin-top: 20px;
+        }
+        .status-log .entry {
+            padding: 3px 0;
+            border-bottom: 1px solid #1a1a2e;
+            color: #8b949e;
+        }
+        .status-log .entry:last-child { border-bottom: none; }
+        .status-log .entry.success { color: #3fb950; }
+        .status-log .entry.error { color: #f85149; }
+
+        /* Running indicator */
+        .running-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #238636;
+            color: #fff;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .stopped-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #333;
+            color: #888;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Connections Table */
+        .connections-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-top: 12px;
+        }
+        .connections-table th {
+            text-align: left;
+            padding: 8px;
+            background: #0d1117;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .connections-table td {
+            padding: 8px;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .connections-table tr:hover td {
+            background: #0f3460;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-pending { background: #1f2d3d; color: #f0ad4e; }
+        .badge-replied { background: #1a3a2a; color: #3fb950; }
+
+        /* Helper text */
+        .helper {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Checkbox group */
+        .checkbox-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 0.85rem;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 LinkedIn Automator</h1>
+        <p class="subtitle">Send connection requests & follow-ups with human-like behavior</p>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="number">{{ stats.today_count }}</div>
+                <div class="label">Sent Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" style="font-size:1.1rem;">{{ stats.session_limit }}</div>
+                <div class="label">Session Limit</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">{{ stats.pacing }}</div>
+                <div class="label">Pacing</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">{{ stats.total_sent }}</div>
+                <div class="label">Total Sent</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">{{ stats.total_follow_only }}</div>
+                <div class="label">Follow-Only Saved</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('connect')">Connect</div>
+            <div class="tab" onclick="showTab('history')">History</div>
+            <div class="tab" onclick="showTab('followonly')">Follow-Only Profiles</div>
+            <div class="tab" onclick="showTab('status')">Live Status</div>
+        </div>
+
+        <!-- Connect Panel -->
+        <div class="panel active" id="panel-connect">
+            <h3 style="margin-bottom: 16px;">Send Connection Requests</h3>
+
+            <div class="form-group">
+                <label>Search Keywords * (one per line for multiple searches)</label>
+                <textarea id="keywords" rows="6" placeholder="Financial Services Recruiter&#10;Banking Headhunter Dubai&#10;Goldman Sachs Recruiter"></textarea>
+                <div class="btn-group" style="margin-top:8px;">
+                    <button class="btn btn-primary" type="button" onclick="loadKeywordsFile()" style="font-size:0.8rem; padding:6px 12px;">Load Preconfigured (357 keywords)</button>
+                    <span id="keywords-count" style="color:#888; font-size:0.8rem; margin-left:8px;"></span>
+                </div>
+                <p class="helper">Each line = separate search. Click "Load Preconfigured" to fill with the full company list.</p>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Max Pages</label>
+                    <input type="number" id="max-pages" value="5" min="1" max="20">
+                </div>
+                <div class="form-group">
+                    <label>Title Filter (optional)</label>
+                    <input type="text" id="title-filter" placeholder="e.g. Director, VP, Manager">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Location (optional)</label>
+                    <input type="text" id="location-filter" placeholder="Leave blank for UAE default (Dubai, Abu Dhabi, Sharjah, UAE)">
+                    <p class="helper">Default: UAE + Dubai + Abu Dhabi + Sharjah. Override by typing a different location.</p>
+                </div>
+                <div class="form-group">
+                    <label>Industry (optional)</label>
+                    <input type="text" id="industry-filter" placeholder="e.g. Logistics, E-commerce">
+                    <p class="helper">Comma-separated if multiple</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Company (optional)</label>
+                <input type="text" id="company-filter" placeholder="e.g. Amazon, Noon, Talabat">
+                <p class="helper">Current company filter</p>
+            </div>
+
+            <div class="form-group">
+                <label>Connection Note * <span style="color:#666;">(use {name} for first name)</span></label>
+                <textarea id="conn-note" maxlength="300" 
+                    placeholder="Hi {name}, I'm a finance professional...">Hi {name}, I'm a finance professional with 2.5+ years at Arcesium (D.E. Shaw group) in Financial Services. Currently exploring relevant opportunities in Dubai. Would love to connect and explore if there's a fit. Happy to share my resume if helpful. Thanks!</textarea>
+                <p class="char-count"><span id="char-count">0</span>/300</p>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="btn-start" onclick="startCampaign()">
+                    🚀 Start Campaign
+                </button>
+                <button class="btn btn-danger" id="btn-stop" onclick="stopCampaign()" style="display:none;">
+                    ⏹ Stop
+                </button>
+                <span id="run-indicator"></span>
+            </div>
+        </div>
+
+        <!-- History Panel -->
+        <div class="panel" id="panel-history">
+            <h3 style="margin-bottom: 16px;">Connection Requests Sent</h3>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <button class="btn btn-primary" onclick="loadHistory()">🔄 Refresh</button>
+                <a href="/api/download-excel" class="btn btn-primary" style="text-decoration:none;">📥 Download CSV</a>
+            </div>
+            <div id="history-content">
+                <p style="color:#666;">Click Refresh to load history.</p>
+            </div>
+        </div>
+
+        <!-- Follow-Only Panel -->
+        <div class="panel" id="panel-followonly">
+            <h3 style="margin-bottom: 16px;">Follow-Only Profiles</h3>
+            <p style="color:#888; font-size:0.85rem; margin-bottom:16px;">
+                These people showed "Follow" instead of "Connect". Visit their profile directly to send a connection request.
+            </p>
+            <button class="btn btn-primary" onclick="loadHistory()" style="margin-bottom:12px;">
+                🔄 Refresh
+            </button>
+            <div id="follow-only-content">
+                <p style="color:#666;">Click Refresh to load.</p>
+            </div>
+        </div>
+
+        <!-- Status Panel -->
+        <div class="panel" id="panel-status">
+            <h3 style="margin-bottom: 16px;">Live Status</h3>
+            <div id="status-indicator" style="margin-bottom:12px;"></div>
+            <div class="status-log" id="status-log">
+                <div class="entry">Waiting for activity...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('panel-' + name).classList.add('active');
+        }
+
+        // Load preconfigured keywords
+        async function loadKeywordsFile() {
+            const resp = await fetch('/api/keywords');
+            const data = await resp.json();
+            if (data.keywords) {
+                document.getElementById('keywords').value = data.keywords.join('\n');
+                document.getElementById('keywords-count').textContent = data.keywords.length + ' keywords loaded';
+            }
+        }
+
+        // Character counter
+        const noteField = document.getElementById('conn-note');
+        const charCount = document.getElementById('char-count');
+        noteField.addEventListener('input', () => {
+            const len = noteField.value.length;
+            charCount.textContent = len;
+            charCount.parentElement.classList.toggle('warn', len > 280);
+        });
+
+        // Start campaign
+        async function startCampaign() {
+            const keywordsRaw = document.getElementById('keywords').value.trim();
+            const note = document.getElementById('conn-note').value.trim();
+            const maxPages = document.getElementById('max-pages').value;
+            const titleFilter = document.getElementById('title-filter').value.trim();
+            const locationFilter = document.getElementById('location-filter').value.trim();
+            const industryFilter = document.getElementById('industry-filter').value.trim();
+            const companyFilter = document.getElementById('company-filter').value.trim();
+
+            if (!keywordsRaw) { alert('Enter search keywords'); return; }
+            if (!note) { alert('Enter a connection note'); return; }
+
+            // Split by newlines into multiple keywords
+            const keywordsList = keywordsRaw.split('\n').map(k => k.trim()).filter(k => k.length > 0);
+
+            const resp = await fetch('/api/start-campaign', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    keywords_list: keywordsList,
+                    note,
+                    max_pages: maxPages,
+                    title_filter: titleFilter,
+                    location_filter: locationFilter,
+                    industry_filter: industryFilter,
+                    company_filter: companyFilter,
+                }),
+            });
+            const data = await resp.json();
+
+            if (resp.ok) {
+                document.getElementById('btn-start').disabled = true;
+                document.getElementById('btn-stop').style.display = 'inline-block';
+                showTab('status');
+                document.querySelectorAll('.tab')[3].click();
+                startPolling();
+            } else {
+                alert(data.error || 'Failed to start');
+            }
+        }
+
+        // Stop campaign
+        async function stopCampaign() {
+            await fetch('/api/stop', { method: 'POST' });
+            document.getElementById('btn-stop').style.display = 'none';
+            document.getElementById('btn-start').disabled = false;
+        }
+
+        // Poll status
+
+        // Poll status
+        let pollInterval = null;
+        function startPolling() {
+            if (pollInterval) clearInterval(pollInterval);
+            pollInterval = setInterval(pollStatus, 2000);
+            pollStatus();
+        }
+
+        async function pollStatus() {
+            const resp = await fetch('/api/status');
+            const data = await resp.json();
+
+            const log = document.getElementById('status-log');
+            const indicator = document.getElementById('status-indicator');
+            const runIndicator = document.getElementById('run-indicator');
+
+            if (data.running) {
+                indicator.innerHTML = '<span class="running-badge">⚡ Running</span>';
+                runIndicator.innerHTML = '<span class="running-badge">⚡ Running</span>';
+            } else {
+                indicator.innerHTML = '<span class="stopped-badge">⏸ Idle</span>';
+                runIndicator.innerHTML = '';
+                document.getElementById('btn-start').disabled = false;
+                document.getElementById('btn-stop').style.display = 'none';
+                if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+            }
+
+            if (data.messages && data.messages.length > 0) {
+                log.innerHTML = data.messages.map(m => {
+                    let cls = 'entry';
+                    if (m.message.includes('Sent to') || m.message.includes('sent')) cls += ' success';
+                    if (m.message.includes('Error') || m.message.includes('error')) cls += ' error';
+                    return `<div class="${cls}">${m.message}</div>`;
+                }).join('');
+                log.scrollTop = log.scrollHeight;
+            }
+        }
+
+        // Load history
+        async function loadHistory() {
+            const resp = await fetch('/api/connections');
+            const data = await resp.json();
+            const container = document.getElementById('history-content');
+            const followOnlyContainer = document.getElementById('follow-only-content');
+
+            // Connections sent
+            if (!data.connections || data.connections.length === 0) {
+                container.innerHTML = '<p style="color:#666;">No connections sent yet.</p>';
+            } else {
+                let html = `<p style="color:#888; margin-bottom:8px; font-size:0.8rem;">${data.connections.length} total requests sent</p>`;
+                html += `<table class="connections-table">
+                    <thead><tr>
+                        <th>Name</th><th>Title</th><th>Company</th><th>Location</th><th>Date</th><th>Profile</th>
+                    </tr></thead><tbody>`;
+
+                for (const c of data.connections.slice().reverse()) {
+                    html += `<tr>
+                        <td>${c.name}</td>
+                        <td>${c.title || '-'}</td>
+                        <td>${c.company || '-'}</td>
+                        <td>${c.location || '-'}</td>
+                        <td>${c.date_sent ? c.date_sent.split(' ')[0] : '-'}</td>
+                        <td><a href="${c.profile_url}" target="_blank" style="color:#0a66c2;">Open ↗</a></td>
+                    </tr>`;
+                }
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            }
+
+            // Follow-only people
+            if (!data.follow_only || data.follow_only.length === 0) {
+                followOnlyContainer.innerHTML = '<p style="color:#666;">None recorded yet.</p>';
+            } else {
+                let html = `<p style="color:#888; margin-bottom:8px; font-size:0.8rem;">${data.follow_only.length} profiles. These couldn't be connected — visit manually or retry later.</p>`;
+                html += `<table class="connections-table">
+                    <thead><tr>
+                        <th>Name</th><th>Title</th><th>Company</th><th>Location</th><th>Date</th><th>Profile</th>
+                    </tr></thead><tbody>`;
+
+                for (const f of data.follow_only.slice().reverse()) {
+                    html += `<tr>
+                        <td><strong>${f.name}</strong></td>
+                        <td>${f.title || '-'}</td>
+                        <td>${f.company || '-'}</td>
+                        <td>${f.location || '-'}</td>
+                        <td>${f.date_seen ? f.date_seen.split(' ')[0] : '-'}</td>
+                        <td><a href="${f.profile_url}" target="_blank" style="color:#0a66c2; font-weight:600;">Open ↗</a></td>
+                    </tr>`;
+                }
+                html += '</tbody></table>';
+                followOnlyContainer.innerHTML = html;
+            }
+        }
+
+        // Initial poll
+        pollStatus();
+    </script>
+</body>
+</html>
