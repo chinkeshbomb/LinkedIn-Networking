@@ -10,9 +10,12 @@ echo.
 :: Check Python
 python --version 2>nul
 if errorlevel 1 (
-    echo ERROR: Python not found. Install from python.org
-    pause
-    exit /b 1
+    python3 --version 2>nul
+    if errorlevel 1 (
+        echo ERROR: Python not found. Install from python.org
+        pause
+        exit /b 1
+    )
 )
 
 :: Create venv if needed
@@ -28,10 +31,11 @@ call "venv\Scripts\activate.bat"
 python -c "import flask" 2>nul
 if errorlevel 1 (
     echo Installing dependencies...
+    pip install --upgrade pip
     pip install -r requirements.txt
 )
 
-:: Launch Chrome (separate command to avoid line-continuation issues)
+:: Launch Chrome with debugging
 echo Launching Chrome with debugging...
 start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-allow-origins=* --user-data-dir="%cd%\chrome_profile" --no-first-run --no-default-browser-check https://www.linkedin.com
 
@@ -39,12 +43,13 @@ echo Waiting for Chrome...
 timeout /t 4 /nobreak >nul
 
 echo.
-echo Chrome is running. Open http://localhost:5000
+echo Chrome running on port 9222
+echo FIRST TIME: Log in to LinkedIn in Chrome.
+echo Open http://localhost:5000
 echo.
 
-:: Start Flask app
 python app.py
 
 echo.
-echo App stopped. See errors above.
+echo App stopped.
 pause
